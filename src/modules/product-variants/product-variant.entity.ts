@@ -15,7 +15,7 @@ export class ProductVariant {
   @Column()
   productId: string;
 
-  @ManyToOne(() => Product, (product) => product.variants as ProductVariant[], {
+  @ManyToOne(() => Product, (product) => product.variants, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'productId' })
