@@ -1,7 +1,7 @@
 // src/modules/users/entities/user.entity.ts
 
 import { Exclude } from 'class-transformer';
-import { Role } from 'src/common/types/roles.enum';
+import { Role } from '../../common/types/roles.enum';
 import {
   Column,
   CreateDateColumn,

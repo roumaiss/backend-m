@@ -4,12 +4,14 @@ import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
 import { Product } from './product.entity';
 import { BrandModule } from '../brand/brand.module';
+import { CategoryModule } from '../category/category.module';
 import { SubcategoryModule } from '../subcategory/subcategory.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product]),
     BrandModule,
+    CategoryModule,
     SubcategoryModule,
   ],
   controllers: [ProductsController],

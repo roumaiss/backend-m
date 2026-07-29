@@ -3,10 +3,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { brand } from '../brand/brand.entity';
+import { Category } from '../category/category.entity';
 import { Subcategory } from '../subcategory/subcategory.entity';
+import { ProductVariant } from '../product-variants/product-variant.entity';
 import { ProductType } from './product-type.enum';
 
 @Entity('products')
@@ -19,22 +22,6 @@ export class Product {
 
   @Column()
   description: string;
-
-  @Column({ nullable: true })
-  shade: string;
-
-  @Column({ nullable: true })
-  sizeOrVolume: string;
-
-  @Column('decimal', { precision: 10, scale: 2 })
-  price: number;
-
-  @Column({ default: 0 })
-  stockQuantity: number;
-
-  get inStock(): boolean {
-    return this.stockQuantity > 0;
-  }
 
   @Column('simple-array')
   images: string[];
@@ -53,13 +40,19 @@ export class Product {
   brand: brand;
 
   @Column()
+  categoryId: string;
+
+  @ManyToOne(() => Category, { onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'categoryId' })
+  category: Category;
+
+  @Column()
   subcategoryId: string;
 
   @ManyToOne(() => Subcategory, { onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'subcategoryId' })
   subcategory: Subcategory;
 
-  toJSON() {
-    return { ...this, inStock: this.inStock };
-  }
+  @OneToMany(() => ProductVariant, (variant) => variant.product)
+  variants: ProductVariant[];
 }

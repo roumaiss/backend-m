@@ -30,10 +30,7 @@ export class SubcategoryController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() dto: Partial<CreateSubcategoryDto>,
-  ) {
+  update(@Param('id') id: string, @Body() dto: Partial<CreateSubcategoryDto>) {
     return this.subcategoryService.update(id, dto);
   }
 

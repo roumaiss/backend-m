@@ -5,7 +5,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { Role } from 'src/common/types/roles.enum';
+import { Role } from '../../../common/types/roles.enum';
 
 // users/dto/create-user.dto.ts — admin-facing
 export class CreateUserDto {

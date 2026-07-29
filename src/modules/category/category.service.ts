@@ -17,14 +17,11 @@ export class CategoryService {
   }
 
   findAll(): Promise<Category[]> {
-    return this.repo.find({ relations: { subcategories: true } });
+    return this.repo.find();
   }
 
   findById(id: string): Promise<Category | null> {
-    return this.repo.findOne({
-      where: { id },
-      relations: { subcategories: true },
-    });
+    return this.repo.findOne({ where: { id } });
   }
 
   async findByIdOrFail(id: string): Promise<Category> {
