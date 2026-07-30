@@ -15,6 +15,7 @@ import { SubcategoryModule } from './modules/subcategory/subcategory.module';
 import { ProductsModule } from './modules/products/products.module';
 import { ProductVariantModule } from './modules/product-variants/product-variant.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { OrderItemModule } from './modules/order-items/order-item.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { OrdersModule } from './modules/orders/orders.module';
     ProductsModule,
     ProductVariantModule,
     OrdersModule,
+    OrderItemModule,
   ],
   controllers: [AppController],
   providers: [AppService],
