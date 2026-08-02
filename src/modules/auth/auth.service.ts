@@ -40,7 +40,7 @@ export class AuthService {
 
     // same error for unknown email and wrong password — don't leak which
     if (!user || !(await argon2.verify(user.passwordHash, dto.password))) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Password or email is incorrect');
     }
 
     const tokens = await this.issueTokens(user);

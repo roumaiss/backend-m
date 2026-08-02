@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { brand } from '../brand/brand.entity';
-import { Category } from '../category/category.entity';
 import { Subcategory } from '../subcategory/subcategory.entity';
 import { ProductVariant } from '../product-variants/product-variant.entity';
 import { ProductType } from './product-type.enum';
@@ -38,13 +37,6 @@ export class Product {
   @ManyToOne(() => brand, { onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'brandId' })
   brand: brand;
-
-  @Column()
-  categoryId: string;
-
-  @ManyToOne(() => Category, { onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'categoryId' })
-  category: Category;
 
   @Column()
   subcategoryId: string;

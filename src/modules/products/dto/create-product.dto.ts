@@ -12,6 +12,5 @@ export class CreateProductDto {
   @IsEnum(ProductType) type: ProductType;
 
   @IsUUID() brandId: string;
-  @IsUUID() categoryId: string;
   @IsUUID() subcategoryId: string;
 }
