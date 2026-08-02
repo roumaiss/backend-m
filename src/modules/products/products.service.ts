@@ -3,8 +3,51 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
+import { ProductResponse } from './dto/product-response.dto';
 import { BrandService } from '../brand/brand.service';
 import { SubcategoryService } from '../subcategory/subcategory.service';
+
+const PRODUCT_RELATIONS = {
+  brand: true,
+  subcategory: { category: true },
+  variants: true,
+} as const;
+
+const PRODUCT_SELECT = {
+  id: true,
+  name: true,
+  description: true,
+  images: true,
+  primaryImage: true,
+  type: true,
+  brand: { name: true },
+  subcategory: { name: true, category: { name: true } },
+} as const;
+
+function toProductResponse(product: Product): ProductResponse {
+  return {
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    images: product.images,
+    primaryImage: product.primaryImage,
+    type: product.type,
+    brand: product.brand.name,
+    subcategory: {
+      name: product.subcategory.name,
+      category: product.subcategory.category.name,
+    },
+    variants: product.variants.map((variant) => ({
+      id: variant.id,
+      shade: variant.shade,
+      color: variant.color,
+      volume: variant.volume,
+      price: variant.price as unknown as string,
+      stockQuantity: variant.stockQuantity,
+      inStock: variant.inStock,
+    })),
+  };
+}
 
 @Injectable()
 export class ProductsService {
@@ -15,34 +58,43 @@ export class ProductsService {
     private readonly subcategoryService: SubcategoryService,
   ) {}
 
-  async create(dto: CreateProductDto): Promise<Product> {
+  async create(dto: CreateProductDto): Promise<ProductResponse> {
     await this.brandService.findByIdOrFail(dto.brandId);
     await this.subcategoryService.findByIdOrFail(dto.subcategoryId);
-    const product = this.repo.create(dto);
-    return this.repo.save(product);
+    const product = await this.repo.save(this.repo.create(dto));
+    return this.findByIdOrFail(product.id);
   }
 
-  findAll(): Promise<Product[]> {
-    return this.repo.find({
-      relations: { brand: true, subcategory: true, variants: true },
+  async findAll(): Promise<ProductResponse[]> {
+    const products = await this.repo.find({
+      relations: PRODUCT_RELATIONS,
+      select: PRODUCT_SELECT,
     });
+    return products.map(toProductResponse);
   }
 
-  findById(id: string): Promise<Product | null> {
-    return this.repo.findOne({
+  async findById(id: string): Promise<ProductResponse | null> {
+    const product = await this.repo.findOne({
       where: { id },
-      relations: { brand: true, subcategory: true, variants: true },
+      relations: PRODUCT_RELATIONS,
+      select: PRODUCT_SELECT,
     });
+    return product ? toProductResponse(product) : null;
   }
 
-  async findByIdOrFail(id: string): Promise<Product> {
+  async findByIdOrFail(id: string): Promise<ProductResponse> {
     const product = await this.findById(id);
     if (!product) throw new NotFoundException('Product not found');
     return product;
   }
 
-  async update(id: string, dto: Partial<CreateProductDto>): Promise<Product> {
-    await this.findByIdOrFail(id);
+  async update(
+    id: string,
+    dto: Partial<CreateProductDto>,
+  ): Promise<ProductResponse> {
+    if (!(await this.repo.exists({ where: { id } }))) {
+      throw new NotFoundException('Product not found');
+    }
     if (dto.brandId) await this.brandService.findByIdOrFail(dto.brandId);
     if (dto.subcategoryId) {
       await this.subcategoryService.findByIdOrFail(dto.subcategoryId);
@@ -52,7 +104,9 @@ export class ProductsService {
   }
 
   async remove(id: string): Promise<void> {
-    await this.findByIdOrFail(id);
+    if (!(await this.repo.exists({ where: { id } }))) {
+      throw new NotFoundException('Product not found');
+    }
     await this.repo.delete(id);
   }
 }

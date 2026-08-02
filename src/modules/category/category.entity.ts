@@ -9,6 +9,9 @@ export class Category {
   @Column()
   name: string;
 
-  @OneToMany(() => Subcategory, (subcategory) => subcategory.category)
+  @OneToMany(
+    () => Subcategory,
+    (subcategory: Subcategory) => subcategory.category,
+  )
   subcategories: Subcategory[];
 }

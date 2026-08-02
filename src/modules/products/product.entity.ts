@@ -45,6 +45,6 @@ export class Product {
   @JoinColumn({ name: 'subcategoryId' })
   subcategory: Subcategory;
 
-  @OneToMany(() => ProductVariant, (variant) => variant.product)
+  @OneToMany(() => ProductVariant, (variant: ProductVariant) => variant.product)
   variants: ProductVariant[];
 }
