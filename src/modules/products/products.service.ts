@@ -87,10 +87,12 @@ export class ProductsService {
 
     return {
       data: products.map(toProductResponse),
-      total,
-      page: safePage,
-      limit: safeLimit,
-      totalPages: Math.ceil(total / safeLimit),
+      meta: {
+        total,
+        page: safePage,
+        limit: safeLimit,
+        totalPages: Math.ceil(total / safeLimit),
+      },
     };
   }
 
