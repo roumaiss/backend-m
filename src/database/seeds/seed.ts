@@ -1,4 +1,6 @@
 // src/database/seeds/seed.ts — populates demo makeup catalog data. Run with `npm run seed`.
+import { existsSync } from 'fs';
+import { join } from 'path';
 import {
   DeepPartial,
   FindOptionsWhere,
@@ -135,7 +137,8 @@ const PRODUCTS: ProductSeed[] = [
   },
   {
     name: 'Sheglam Glow Getter Liquid Highlighter',
-    description: 'A liquid highlighter that melts into skin for a lit-from-within glow.',
+    description:
+      'A liquid highlighter that melts into skin for a lit-from-within glow.',
     subcategory: 'Highlighter',
     type: ProductType.LIQUID,
     variants: [
@@ -170,9 +173,7 @@ const PRODUCTS: ProductSeed[] = [
       '12-shade matte, satin, and metallic eyeshadow palette in berry tones.',
     subcategory: 'Eyeshadow Palette',
     type: ProductType.PALETTE,
-    variants: [
-      { shade: 'Berry (12 shades)', price: 10.0, stockQuantity: 35 },
-    ],
+    variants: [{ shade: 'Berry (12 shades)', price: 10.0, stockQuantity: 35 }],
   },
   {
     name: 'Sheglam Line & Snatch Waterproof Eyeliner Pencil',
@@ -181,13 +182,17 @@ const PRODUCTS: ProductSeed[] = [
     type: ProductType.PENCIL,
     variants: [
       { shade: 'Jet Black', volume: '1.2g', price: 5.0, stockQuantity: 45 },
-      { shade: 'Espresso Brown', volume: '1.2g', price: 5.0, stockQuantity: 20 },
+      {
+        shade: 'Espresso Brown',
+        volume: '1.2g',
+        price: 5.0,
+        stockQuantity: 20,
+      },
     ],
   },
   {
     name: 'Sheglam Bombshell Volumizing Mascara',
-    description:
-      'A clump-free volumizing mascara for bold, fluttery lashes.',
+    description: 'A clump-free volumizing mascara for bold, fluttery lashes.',
     subcategory: 'Mascara',
     type: ProductType.CREAM,
     variants: [
@@ -197,7 +202,8 @@ const PRODUCTS: ProductSeed[] = [
   },
   {
     name: 'Sheglam Brow Snatched Tinted Gel',
-    description: 'A tinted, flexible-hold brow gel that shapes and sets brows all day.',
+    description:
+      'A tinted, flexible-hold brow gel that shapes and sets brows all day.',
     subcategory: 'Eyebrow',
     type: ProductType.GEL,
     variants: [
@@ -208,18 +214,30 @@ const PRODUCTS: ProductSeed[] = [
   },
   {
     name: 'Sheglam Fluffy Wispy False Lashes',
-    description: 'Lightweight, reusable false lashes with a natural wispy finish.',
+    description:
+      'Lightweight, reusable false lashes with a natural wispy finish.',
     subcategory: 'Lashes',
     // No enum value fits a physical accessory like lashes — closest fit kept for now.
     type: ProductType.STICK,
     variants: [
-      { shade: 'Wispy Natural', volume: '1 pair', price: 4.5, stockQuantity: 30 },
-      { shade: 'Dramatic Volume', volume: '1 pair', price: 4.5, stockQuantity: 18 },
+      {
+        shade: 'Wispy Natural',
+        volume: '1 pair',
+        price: 4.5,
+        stockQuantity: 30,
+      },
+      {
+        shade: 'Dramatic Volume',
+        volume: '1 pair',
+        price: 4.5,
+        stockQuantity: 18,
+      },
     ],
   },
   {
     name: 'Sheglam Matte Me Up Lipstick',
-    description: 'A creamy matte lipstick with full-pigment, one-swipe color payoff.',
+    description:
+      'A creamy matte lipstick with full-pigment, one-swipe color payoff.',
     subcategory: 'Lipstick',
     type: ProductType.STICK,
     variants: [
@@ -272,8 +290,30 @@ async function findOrCreate<T extends ObjectLiteral>(
   return repo.save(repo.create(data));
 }
 
-function placeholderImage(name: string): string {
-  return `https://placehold.co/600x600?text=${encodeURIComponent(name)}`;
+const UPLOADS_DIR = join(__dirname, '..', '..', '..', 'uploads');
+const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+
+/** Looks for uploads/<subdir>/<slug>.<ext> on disk, trying each known image
+ * extension, so any format works and no extension is baked in until it's
+ * actually been placed there. Falls back to a placeholder until it is. */
+function findUploadedImage(
+  subdir: 'brands' | 'products',
+  slug: string,
+): string {
+  for (const ext of IMAGE_EXTENSIONS) {
+    const fileName = `${slug}${ext}`;
+    if (existsSync(join(UPLOADS_DIR, subdir, fileName))) {
+      return `/uploads/${subdir}/${fileName}`;
+    }
+  }
+  return `https://placehold.co/600x600?text=${encodeURIComponent(slug)}`;
+}
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 }
 
 async function seed() {
@@ -285,11 +325,16 @@ async function seed() {
   const productRepo = dataSource.getRepository(Product);
   const variantRepo = dataSource.getRepository(ProductVariant);
 
+  const sheglamImage = findUploadedImage('brands', 'sheglam');
   const sheglam = await findOrCreate(
     brandRepo,
     { name: 'Sheglam' },
-    { name: 'Sheglam', image: placeholderImage('Sheglam') },
+    { name: 'Sheglam', image: sheglamImage },
   );
+  if (sheglam.image !== sheglamImage) {
+    sheglam.image = sheglamImage;
+    await brandRepo.save(sheglam);
+  }
 
   const categoryIds: Record<string, string> = {};
   for (const categoryName of Object.keys(CATEGORY_TREE)) {
@@ -314,7 +359,10 @@ async function seed() {
   }
 
   for (const seedProduct of PRODUCTS) {
-    const primaryImage = placeholderImage(seedProduct.name);
+    const primaryImage = findUploadedImage(
+      'products',
+      slugify(seedProduct.name),
+    );
 
     let product = await productRepo.findOne({
       where: { name: seedProduct.name },
@@ -332,6 +380,8 @@ async function seed() {
     } else {
       Object.assign(product, {
         description: seedProduct.description,
+        images: [primaryImage],
+        primaryImage,
         type: seedProduct.type,
         brandId: sheglam.id,
         subcategoryId: subcategoryIds[seedProduct.subcategory],
@@ -342,7 +392,7 @@ async function seed() {
     // reseed variants from scratch to keep re-runs idempotent
     await variantRepo.delete({ productId: product.id });
     const variants = seedProduct.variants.map((variant) =>
-      variantRepo.create({ ...variant, productId: product!.id }),
+      variantRepo.create({ ...variant, productId: product.id }),
     );
     await variantRepo.save(variants);
 

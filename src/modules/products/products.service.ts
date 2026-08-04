@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductResponse } from './dto/product-response.dto';
+import {
+  PaginatedProductResponse,
+  ProductResponse,
+} from './dto/product-response.dto';
 import { BrandService } from '../brand/brand.service';
 import { SubcategoryService } from '../subcategory/subcategory.service';
 
@@ -65,12 +68,30 @@ export class ProductsService {
     return this.findByIdOrFail(product.id);
   }
 
-  async findAll(): Promise<ProductResponse[]> {
-    const products = await this.repo.find({
+  async findAll(
+    categoryId?: string,
+    page = 1,
+    limit = 10,
+  ): Promise<PaginatedProductResponse> {
+    const safePage = Math.max(1, page);
+    const safeLimit = Math.max(1, limit);
+
+    const [products, total] = await this.repo.findAndCount({
+      where: categoryId ? { subcategory: { categoryId } } : {},
       relations: PRODUCT_RELATIONS,
       select: PRODUCT_SELECT,
+      order: { name: 'ASC' },
+      skip: (safePage - 1) * safeLimit,
+      take: safeLimit,
     });
-    return products.map(toProductResponse);
+
+    return {
+      data: products.map(toProductResponse),
+      total,
+      page: safePage,
+      limit: safeLimit,
+      totalPages: Math.ceil(total / safeLimit),
+    };
   }
 
   async findById(id: string): Promise<ProductResponse | null> {

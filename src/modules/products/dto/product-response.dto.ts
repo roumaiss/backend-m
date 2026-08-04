@@ -24,3 +24,11 @@ export interface ProductResponse {
   };
   variants: ProductVariantResponse[];
 }
+
+export interface PaginatedProductResponse {
+  data: ProductResponse[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
