@@ -18,6 +18,7 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { OrderItemModule } from './modules/order-items/order-item.module';
 import { CartModule } from './modules/cart/cart.module';
 import { CartItemModule } from './modules/cart-items/cart-item.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { CartItemModule } from './modules/cart-items/cart-item.module';
     OrderItemModule,
     CartModule,
     CartItemModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
