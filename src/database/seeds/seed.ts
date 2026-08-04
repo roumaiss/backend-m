@@ -34,6 +34,7 @@ const CATEGORY_TREE: Record<string, string[]> = {
 interface VariantSeed {
   shade?: string;
   color?: string;
+  hexColor?: string;
   volume?: string;
   price: number;
   stockQuantity: number;
@@ -55,12 +56,12 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Foundation',
     type: ProductType.LIQUID,
     variants: [
-      { shade: 'Sand', volume: '30ml', price: 9.0, stockQuantity: 40 },
-      { shade: 'Butterscotch', volume: '30ml', price: 9.0, stockQuantity: 25 },
-      { shade: 'Golden', volume: '30ml', price: 9.0, stockQuantity: 0 },
-      { shade: 'Acorn', volume: '30ml', price: 9.0, stockQuantity: 15 },
-      { shade: 'Porcelain', volume: '30ml', price: 9.0, stockQuantity: 33 },
-      { shade: 'Honey', volume: '30ml', price: 9.0, stockQuantity: 8 },
+      { shade: 'Sand', hexColor: '#E3B98F', volume: '30ml', price: 9.0, stockQuantity: 40 },
+      { shade: 'Butterscotch', hexColor: '#C68B59', volume: '30ml', price: 9.0, stockQuantity: 25 },
+      { shade: 'Golden', hexColor: '#D9A066', volume: '30ml', price: 9.0, stockQuantity: 0 },
+      { shade: 'Acorn', hexColor: '#8B5A3C', volume: '30ml', price: 9.0, stockQuantity: 15 },
+      { shade: 'Porcelain', hexColor: '#F4DCC8', volume: '30ml', price: 9.0, stockQuantity: 33 },
+      { shade: 'Honey', hexColor: '#D2996B', volume: '30ml', price: 9.0, stockQuantity: 8 },
     ],
   },
   {
@@ -70,9 +71,9 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Foundation',
     type: ProductType.POWDER,
     variants: [
-      { shade: 'Butterscotch', volume: '9g', price: 8.0, stockQuantity: 20 },
-      { shade: 'Sand', volume: '9g', price: 8.0, stockQuantity: 30 },
-      { shade: 'Acorn', volume: '9g', price: 8.0, stockQuantity: 14 },
+      { shade: 'Butterscotch', hexColor: '#C68B59', volume: '9g', price: 8.0, stockQuantity: 20 },
+      { shade: 'Sand', hexColor: '#E3B98F', volume: '9g', price: 8.0, stockQuantity: 30 },
+      { shade: 'Acorn', hexColor: '#8B5A3C', volume: '9g', price: 8.0, stockQuantity: 14 },
     ],
   },
   {
@@ -82,9 +83,9 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Concealer',
     type: ProductType.STICK,
     variants: [
-      { shade: 'Acorn', volume: '4g', price: 6.0, stockQuantity: 18 },
-      { shade: 'Sand', volume: '4g', price: 6.0, stockQuantity: 22 },
-      { shade: 'Butterscotch', volume: '4g', price: 6.0, stockQuantity: 10 },
+      { shade: 'Acorn', hexColor: '#8B5A3C', volume: '4g', price: 6.0, stockQuantity: 18 },
+      { shade: 'Sand', hexColor: '#E3B98F', volume: '4g', price: 6.0, stockQuantity: 22 },
+      { shade: 'Butterscotch', hexColor: '#C68B59', volume: '4g', price: 6.0, stockQuantity: 10 },
     ],
   },
   {
@@ -105,10 +106,10 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Blush',
     type: ProductType.LIQUID,
     variants: [
-      { shade: 'Dusky Rose', volume: '6ml', price: 8.0, stockQuantity: 25 },
-      { shade: 'Sunny Nude', volume: '6ml', price: 8.0, stockQuantity: 12 },
-      { shade: 'Coral Kiss', volume: '6ml', price: 8.0, stockQuantity: 19 },
-      { shade: 'Berry Bliss', volume: '6ml', price: 8.0, stockQuantity: 7 },
+      { shade: 'Dusky Rose', hexColor: '#C97C7C', volume: '6ml', price: 8.0, stockQuantity: 25 },
+      { shade: 'Sunny Nude', hexColor: '#E8A87C', volume: '6ml', price: 8.0, stockQuantity: 12 },
+      { shade: 'Coral Kiss', hexColor: '#FF7F6B', volume: '6ml', price: 8.0, stockQuantity: 19 },
+      { shade: 'Berry Bliss', hexColor: '#A94466', volume: '6ml', price: 8.0, stockQuantity: 7 },
     ],
   },
   {
@@ -118,9 +119,9 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Bronzer',
     type: ProductType.POWDER,
     variants: [
-      { shade: 'Light Bronze', volume: '9g', price: 9.0, stockQuantity: 20 },
-      { shade: 'Medium Bronze', volume: '9g', price: 9.0, stockQuantity: 15 },
-      { shade: 'Deep Bronze', volume: '9g', price: 9.0, stockQuantity: 5 },
+      { shade: 'Light Bronze', hexColor: '#C68642', volume: '9g', price: 9.0, stockQuantity: 20 },
+      { shade: 'Medium Bronze', hexColor: '#A5672B', volume: '9g', price: 9.0, stockQuantity: 15 },
+      { shade: 'Deep Bronze', hexColor: '#7A4B1F', volume: '9g', price: 9.0, stockQuantity: 5 },
     ],
   },
   {
@@ -130,9 +131,9 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Contour',
     type: ProductType.STICK,
     variants: [
-      { shade: 'Fair', volume: '8g', price: 7.5, stockQuantity: 22 },
-      { shade: 'Medium', volume: '8g', price: 7.5, stockQuantity: 17 },
-      { shade: 'Tan', volume: '8g', price: 7.5, stockQuantity: 9 },
+      { shade: 'Fair', hexColor: '#E8C4A0', volume: '8g', price: 7.5, stockQuantity: 22 },
+      { shade: 'Medium', hexColor: '#C68B59', volume: '8g', price: 7.5, stockQuantity: 17 },
+      { shade: 'Tan', hexColor: '#A5713D', volume: '8g', price: 7.5, stockQuantity: 9 },
     ],
   },
   {
@@ -142,8 +143,8 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Highlighter',
     type: ProductType.LIQUID,
     variants: [
-      { shade: 'Moonlight', volume: '15ml', price: 8.5, stockQuantity: 26 },
-      { shade: 'Sunkissed', volume: '15ml', price: 8.5, stockQuantity: 13 },
+      { shade: 'Moonlight', hexColor: '#F5E6D3', volume: '15ml', price: 8.5, stockQuantity: 26 },
+      { shade: 'Sunkissed', hexColor: '#F2C879', volume: '15ml', price: 8.5, stockQuantity: 13 },
     ],
   },
   {
@@ -153,8 +154,8 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Setting Powder',
     type: ProductType.POWDER,
     variants: [
-      { shade: 'Translucent', volume: '25g', price: 7.0, stockQuantity: 40 },
-      { shade: 'Banana', volume: '25g', price: 7.0, stockQuantity: 18 },
+      { shade: 'Translucent', hexColor: '#FDF6EC', volume: '25g', price: 7.0, stockQuantity: 40 },
+      { shade: 'Banana', hexColor: '#F5DEB3', volume: '25g', price: 7.0, stockQuantity: 18 },
     ],
   },
   {
@@ -173,7 +174,14 @@ const PRODUCTS: ProductSeed[] = [
       '12-shade matte, satin, and metallic eyeshadow palette in berry tones.',
     subcategory: 'Eyeshadow Palette',
     type: ProductType.PALETTE,
-    variants: [{ shade: 'Berry (12 shades)', price: 10.0, stockQuantity: 35 }],
+    variants: [
+      {
+        shade: 'Berry (12 shades)',
+        hexColor: '#8E4585',
+        price: 10.0,
+        stockQuantity: 35,
+      },
+    ],
   },
   {
     name: 'Sheglam Line & Snatch Waterproof Eyeliner Pencil',
@@ -181,9 +189,10 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Eyeliner',
     type: ProductType.PENCIL,
     variants: [
-      { shade: 'Jet Black', volume: '1.2g', price: 5.0, stockQuantity: 45 },
+      { shade: 'Jet Black', hexColor: '#0A0A0A', volume: '1.2g', price: 5.0, stockQuantity: 45 },
       {
         shade: 'Espresso Brown',
+        hexColor: '#4B2E1E',
         volume: '1.2g',
         price: 5.0,
         stockQuantity: 20,
@@ -196,8 +205,8 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Mascara',
     type: ProductType.CREAM,
     variants: [
-      { shade: 'Blackest Black', volume: '8ml', price: 9.0, stockQuantity: 38 },
-      { shade: 'Brown Black', volume: '8ml', price: 9.0, stockQuantity: 16 },
+      { shade: 'Blackest Black', hexColor: '#000000', volume: '8ml', price: 9.0, stockQuantity: 38 },
+      { shade: 'Brown Black', hexColor: '#2C1B12', volume: '8ml', price: 9.0, stockQuantity: 16 },
     ],
   },
   {
@@ -207,9 +216,9 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Eyebrow',
     type: ProductType.GEL,
     variants: [
-      { shade: 'Ash Brown', volume: '3ml', price: 6.5, stockQuantity: 24 },
-      { shade: 'Chocolate', volume: '3ml', price: 6.5, stockQuantity: 11 },
-      { shade: 'Black', volume: '3ml', price: 6.5, stockQuantity: 6 },
+      { shade: 'Ash Brown', hexColor: '#7A5C48', volume: '3ml', price: 6.5, stockQuantity: 24 },
+      { shade: 'Chocolate', hexColor: '#4A2C17', volume: '3ml', price: 6.5, stockQuantity: 11 },
+      { shade: 'Black', hexColor: '#1A1A1A', volume: '3ml', price: 6.5, stockQuantity: 6 },
     ],
   },
   {
@@ -241,9 +250,9 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Lipstick',
     type: ProductType.STICK,
     variants: [
-      { shade: 'Rosewood', volume: '3.5g', price: 6.0, stockQuantity: 28 },
-      { shade: 'Cherry Red', volume: '3.5g', price: 6.0, stockQuantity: 19 },
-      { shade: 'Nude Blush', volume: '3.5g', price: 6.0, stockQuantity: 8 },
+      { shade: 'Rosewood', hexColor: '#9E5B5B', volume: '3.5g', price: 6.0, stockQuantity: 28 },
+      { shade: 'Cherry Red', hexColor: '#A71E34', volume: '3.5g', price: 6.0, stockQuantity: 19 },
+      { shade: 'Nude Blush', hexColor: '#C98B7A', volume: '3.5g', price: 6.0, stockQuantity: 8 },
     ],
   },
   {
@@ -252,8 +261,8 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Lip Liner',
     type: ProductType.PENCIL,
     variants: [
-      { shade: 'Rosewood', volume: '1.2g', price: 4.0, stockQuantity: 33 },
-      { shade: 'Cherry Red', volume: '1.2g', price: 4.0, stockQuantity: 21 },
+      { shade: 'Rosewood', hexColor: '#9E5B5B', volume: '1.2g', price: 4.0, stockQuantity: 33 },
+      { shade: 'Cherry Red', hexColor: '#A71E34', volume: '1.2g', price: 4.0, stockQuantity: 21 },
     ],
   },
   {
@@ -263,8 +272,8 @@ const PRODUCTS: ProductSeed[] = [
     type: ProductType.LIQUID,
     variants: [
       { shade: 'Clear Shine', volume: '5ml', price: 5.5, stockQuantity: 40 },
-      { shade: 'Pink Flush', volume: '5ml', price: 5.5, stockQuantity: 25 },
-      { shade: 'Coral Pop', volume: '5ml', price: 5.5, stockQuantity: 12 },
+      { shade: 'Pink Flush', hexColor: '#F4A6C1', volume: '5ml', price: 5.5, stockQuantity: 25 },
+      { shade: 'Coral Pop', hexColor: '#FF6F61', volume: '5ml', price: 5.5, stockQuantity: 12 },
     ],
   },
   {
@@ -273,9 +282,9 @@ const PRODUCTS: ProductSeed[] = [
     subcategory: 'Liquid Lipstick',
     type: ProductType.LIQUID,
     variants: [
-      { shade: 'Berry Bold', volume: '4ml', price: 6.5, stockQuantity: 22 },
-      { shade: 'True Red', volume: '4ml', price: 6.5, stockQuantity: 17 },
-      { shade: 'Mauve On', volume: '4ml', price: 6.5, stockQuantity: 9 },
+      { shade: 'Berry Bold', hexColor: '#7B2D42', volume: '4ml', price: 6.5, stockQuantity: 22 },
+      { shade: 'True Red', hexColor: '#C1121F', volume: '4ml', price: 6.5, stockQuantity: 17 },
+      { shade: 'Mauve On', hexColor: '#9C6B72', volume: '4ml', price: 6.5, stockQuantity: 9 },
     ],
   },
 ];

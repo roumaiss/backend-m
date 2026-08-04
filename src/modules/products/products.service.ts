@@ -44,6 +44,7 @@ function toProductResponse(product: Product): ProductResponse {
       id: variant.id,
       shade: variant.shade,
       color: variant.color,
+      hexColor: variant.hexColor,
       volume: variant.volume,
       price: variant.price as unknown as string,
       stockQuantity: variant.stockQuantity,

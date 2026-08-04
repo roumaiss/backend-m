@@ -28,6 +28,9 @@ export class ProductVariant {
   color: string;
 
   @Column({ nullable: true })
+  hexColor: string;
+
+  @Column({ nullable: true })
   volume: string;
 
   @Column('decimal', { precision: 10, scale: 2 })

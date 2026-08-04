@@ -4,6 +4,7 @@ export interface ProductVariantResponse {
   id: string;
   shade: string | null;
   color: string | null;
+  hexColor: string | null;
   volume: string | null;
   price: string;
   stockQuantity: number;

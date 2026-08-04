@@ -1,10 +1,18 @@
-import { IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+import {
+  IsHexColor,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
 
 export class CreateProductVariantDto {
   @IsUUID() productId: string;
 
   @IsString() @IsOptional() shade?: string;
   @IsString() @IsOptional() color?: string;
+  @IsHexColor() @IsOptional() hexColor?: string;
   @IsString() @IsOptional() volume?: string;
 
   @IsNumber() @Min(0) price: number;
